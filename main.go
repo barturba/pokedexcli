@@ -2,15 +2,28 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
 )
+
+type config struct {
+	Count    int    `json:"count"`
+	Next     string `json:"next"`
+	Previous any    `json:"previous"`
+	Results  []struct {
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	} `json:"results"`
+}
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(cfg *config) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -36,6 +49,8 @@ func getCommands() map[string]cliCommand {
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := getCommands()
+	cfg := config{}
+
 	fmt.Printf("Pokedex > ")
 	for {
 		scanner.Scan()
@@ -45,8 +60,11 @@ func main() {
 		}
 		_, ok := commands[scanner.Text()]
 		fmt.Println("")
+		// jcart, _ := json.MarshalIndent(cfg, "", "\t")
+		// fmt.Println("config:")
+		// fmt.Println(string(jcart))
 		if ok {
-			err = commands[scanner.Text()].callback()
+			err := commands[scanner.Text()].callback(&cfg)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -55,7 +73,7 @@ func main() {
 	}
 }
 
-func commandHelp() error {
+func commandHelp(cfg *config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println("")
@@ -66,12 +84,40 @@ func commandHelp() error {
 	fmt.Println("")
 	return nil
 }
-func commandMap() error {
+
+func commandMap(cfg *config) error {
 	fmt.Println("Future map function")
+	data, err := fetchAPI()
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal([]byte(data), cfg)
+	if err != nil {
+		return err
+	}
+	// fmt.Printf("got: %#v\n", cnf)
+	jcart, _ := json.MarshalIndent(cfg, "", "\t")
+	fmt.Println(string(jcart))
 	return nil
 }
 
-func commandExit() error {
+func fetchAPI() (string, error) {
+	res, err := http.Get("https://pokeapi.co/api/v2/location/?limit=10")
+	if err != nil {
+		return "", err
+	}
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		return "", fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+	}
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s", body), nil
+}
+
+func commandExit(cfg *config) error {
 	os.Exit(0)
 	return nil
 }
