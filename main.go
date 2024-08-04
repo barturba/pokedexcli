@@ -13,7 +13,7 @@ import (
 type config struct {
 	Count    int    `json:"count"`
 	Next     string `json:"next"`
-	Previous any    `json:"previous"`
+	Previous string `json:"previous"`
 	Results  []struct {
 		Name string `json:"name"`
 		URL  string `json:"url"`
@@ -37,6 +37,11 @@ func getCommands() map[string]cliCommand {
 			name:        "map",
 			description: "Displays the names of 20 location areas in the Pokemon world.",
 			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the names of the previous 20 location areas in the Pokemon world.",
+			callback:    commandMapB,
 		},
 		"exit": {
 			name:        "exit",
@@ -88,25 +93,37 @@ func commandHelp(cfg *config) error {
 }
 
 func commandMap(cfg *config) error {
-	fmt.Println("Future map function")
+
 	data, err := fetchAPI(cfg.Next)
 	if err != nil {
 		return err
 	}
 
-	previous := cfg.Next
-
 	err = json.Unmarshal([]byte(data), cfg)
 	if err != nil {
 		return err
 	}
-	cfg.Previous = previous
 	for location := range cfg.Results {
 		fmt.Printf("%s\n", cfg.Results[location].Name)
 	}
 	return nil
 }
 
+func commandMapB(cfg *config) error {
+	data, err := fetchAPI(cfg.Previous)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal([]byte(data), cfg)
+	if err != nil {
+		return err
+	}
+	for location := range cfg.Results {
+		fmt.Printf("%s\n", cfg.Results[location].Name)
+	}
+	return nil
+}
 func fetchAPI(url string) (string, error) {
 	res, err := http.Get(url)
 	if err != nil {
