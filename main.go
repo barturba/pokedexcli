@@ -50,6 +50,8 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := getCommands()
 	cfg := config{}
+	cfg.Next = "https://pokeapi.co/api/v2/location/?limit=20"
+	cfg.Previous = cfg.Next
 
 	fmt.Printf("Pokedex > ")
 	for {
@@ -87,22 +89,26 @@ func commandHelp(cfg *config) error {
 
 func commandMap(cfg *config) error {
 	fmt.Println("Future map function")
-	data, err := fetchAPI()
+	data, err := fetchAPI(cfg.Next)
 	if err != nil {
 		return err
 	}
+
+	previous := cfg.Next
+
 	err = json.Unmarshal([]byte(data), cfg)
 	if err != nil {
 		return err
 	}
-	// fmt.Printf("got: %#v\n", cnf)
-	jcart, _ := json.MarshalIndent(cfg, "", "\t")
-	fmt.Println(string(jcart))
+	cfg.Previous = previous
+	for location := range cfg.Results {
+		fmt.Printf("%s\n", cfg.Results[location].Name)
+	}
 	return nil
 }
 
-func fetchAPI() (string, error) {
-	res, err := http.Get("https://pokeapi.co/api/v2/location/?limit=10")
+func fetchAPI(url string) (string, error) {
+	res, err := http.Get(url)
 	if err != nil {
 		return "", err
 	}
