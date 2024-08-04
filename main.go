@@ -67,9 +67,6 @@ func main() {
 		}
 		_, ok := commands[scanner.Text()]
 		fmt.Println("")
-		// jcart, _ := json.MarshalIndent(cfg, "", "\t")
-		// fmt.Println("config:")
-		// fmt.Println(string(jcart))
 		if ok {
 			err := commands[scanner.Text()].callback(&cfg)
 			if err != nil {
