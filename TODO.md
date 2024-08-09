@@ -1,2 +1,3 @@
-- [ ] refactor pokeapi
-  - [ ] client
+- [ ] refactor pokeapi to use cache
+  - [ ] add()
+  - [ ] get()
