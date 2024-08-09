@@ -22,8 +22,9 @@ const (
 )
 
 func main() {
-	pokeCache := pokecache.NewCache(5 * time.Second)
+	pokeCache := pokecache.NewCache(15 * time.Second)
 	pokeClient := pokeapi.NewClient(5*time.Second, pokeCache)
+	pokeCache.Add("abc.com", []byte("content"))
 	cfgNew := &config{
 		pokeapiClient: pokeClient,
 	}

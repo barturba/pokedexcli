@@ -45,22 +45,31 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	return nil, false
 }
 
+func (c *Cache) remove(key string) {
+	c.mu.Lock()
+	delete(c.cacheEntry, key)
+	c.mu.Unlock()
+}
+
 func (c *Cache) reapLoop() {
-	ticker := time.NewTicker(c.interval)
+	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
 	done := make(chan bool)
-	// go func() {
-	// 	time.Sleep(10 * time.Second)
-	// 	done <- true
-	// }()
 	for {
 		select {
 		case <-done:
 			fmt.Println("Done!")
 			return
 		case t := <-ticker.C:
-			fmt.Println("Current time: ", t)
-			fmt.Printf("Current cache: %+v\n", c)
+			// reap old entries
+			for name, entry := range c.cacheEntry {
+				difference := time.Since(entry.createdAt)
+				if difference >= c.interval {
+					fmt.Printf("Entry for %v expired at %v\n", name, t)
+					c.remove(name)
+					fmt.Printf("Removed %v\n", name)
+				}
+			}
 		}
 	}
 }
