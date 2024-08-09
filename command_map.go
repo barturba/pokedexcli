@@ -6,7 +6,7 @@ import (
 )
 
 func commandMap(cfg *Config) error {
-
+	// locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	data, err := fetchAPI(cfg.Next)
 	if err != nil {
 		return err

@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/barturba/pokedexcli/internal/pokeapi"
 )
 
 type Config struct {
@@ -26,6 +29,12 @@ type CliCommand struct {
 }
 
 func main() {
+	pokeClient := pokeapi.NewClient(5 * time.Second)
+	cfgNew := &config{
+		pokeapiClient: pokeClient,
+	}
+	fmt.Sprintf("%v", cfgNew)
+
 	scanner := bufio.NewScanner(os.Stdin)
 	cmds := GetCommands()
 	cfg := Config{}
