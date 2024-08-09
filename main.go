@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/barturba/pokedexcli/internal/pokeapi"
@@ -26,7 +25,6 @@ func main() {
 	cfgNew := &config{
 		pokeapiClient: pokeClient,
 	}
-	fmt.Sprintf("%v", cfgNew)
 	url := baseURL
 	cfgNew.nextLocationsURL = &url
 	cfgNew.prevLocationsURL = cfgNew.nextLocationsURL
