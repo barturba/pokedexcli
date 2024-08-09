@@ -1,39 +1,38 @@
 package main
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 )
 
-func commandMap(cfg *Config) error {
-	// locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
-	data, err := fetchAPI(cfg.Next)
+func commandMap(cfg *config) error {
+	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
 	}
+	cfg.nextLocationsURL = locationsResp.Next
+	cfg.prevLocationsURL = locationsResp.Previous
 
-	err = json.Unmarshal([]byte(data), cfg)
-	if err != nil {
-		return err
-	}
-	for location := range cfg.Results {
-		fmt.Printf("%s\n", cfg.Results[location].Name)
+	for _, loc := range locationsResp.Results {
+		fmt.Println(loc.Name)
 	}
 	return nil
 }
 
-func commandMapB(cfg *Config) error {
-	data, err := fetchAPI(cfg.Previous)
-	if err != nil {
-		return err
+func commandMapB(cfg *config) error {
+	if cfg.prevLocationsURL == nil {
+		return errors.New("you're on the first page")
 	}
 
-	err = json.Unmarshal([]byte(data), cfg)
+	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.prevLocationsURL)
 	if err != nil {
 		return err
 	}
-	for location := range cfg.Results {
-		fmt.Printf("%s\n", cfg.Results[location].Name)
+	cfg.nextLocationsURL = locationsResp.Next
+	cfg.prevLocationsURL = locationsResp.Previous
+
+	for _, loc := range locationsResp.Results {
+		fmt.Println(loc.Name)
 	}
 	return nil
 }
