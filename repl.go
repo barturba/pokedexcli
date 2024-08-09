@@ -23,7 +23,7 @@ type cliCommand struct {
 
 func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
-	cmds := GetCommands()
+	cmds := getCommands()
 
 	fmt.Printf("Pokedex > ")
 	for {
@@ -41,5 +41,30 @@ func startRepl(cfg *config) {
 			}
 		}
 		fmt.Printf("Pokedex > ")
+	}
+}
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "Displays the names of 20 location areas in the Pokemon world.",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the names of the previous 20 location areas in the Pokemon world.",
+			callback:    commandMapB,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
 	}
 }
