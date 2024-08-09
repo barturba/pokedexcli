@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/barturba/pokedexcli/internal/pokeapi"
+	"github.com/barturba/pokedexcli/internal/pokecache"
 )
 
 type Config struct {
@@ -21,7 +22,8 @@ const (
 )
 
 func main() {
-	pokeClient := pokeapi.NewClient(5 * time.Second)
+	pokeCache := pokecache.NewCache(5 * time.Second)
+	pokeClient := pokeapi.NewClient(5*time.Second, pokeCache)
 	cfgNew := &config{
 		pokeapiClient: pokeClient,
 	}
