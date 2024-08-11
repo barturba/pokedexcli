@@ -27,6 +27,7 @@ func main() {
 	pokeCache.Add("abc.com", []byte("content"))
 	cfg := &config{
 		pokeapiClient: pokeClient,
+		pokeCache:     pokeCache,
 	}
 	url := baseURL
 	cfg.nextLocationsURL = &url

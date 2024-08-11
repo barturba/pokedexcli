@@ -7,10 +7,12 @@ import (
 	"os"
 
 	"github.com/barturba/pokedexcli/internal/pokeapi"
+	"github.com/barturba/pokedexcli/internal/pokecache"
 )
 
 type config struct {
 	pokeapiClient    pokeapi.Client
+	pokeCache        *pokecache.Cache
 	nextLocationsURL *string
 	prevLocationsURL *string
 }
