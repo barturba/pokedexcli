@@ -14,14 +14,13 @@ func commandExplore(cfg *config, areaName string) error {
 	locationResp := pokeapi.RespShallowLocation{}
 	var err error
 
-	val, ok := cfg.pokeCache.Get(areaName)
-	if ok {
+	val, found := cfg.pokeCache.Get(areaName)
+	if found {
 		err = json.Unmarshal(val, &locationResp)
 		if err != nil {
 			return err
 		}
 	} else {
-
 		locationResp, err = cfg.pokeapiClient.ListLocation(&areaName)
 		if err != nil {
 			return err
