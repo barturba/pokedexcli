@@ -1,3 +1,3 @@
-- [ ] refactor pokeapi to use cache
-  - [ ] add()
-  - [ ] get()
+- [ ] added explore function
+  - [x] parsed response
+  - [ ] use caching layer

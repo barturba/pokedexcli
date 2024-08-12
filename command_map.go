@@ -7,7 +7,7 @@ import (
 	"github.com/barturba/pokedexcli/internal/pokeapi"
 )
 
-func commandMap(cfg *config) error {
+func commandMap(cfg *config, param string) error {
 	// check cache before calling pokeapi
 	locationsResp := pokeapi.RespShallowLocations{}
 	var err error
@@ -45,7 +45,7 @@ func commandMap(cfg *config) error {
 	return nil
 }
 
-func commandMapB(cfg *config) error {
+func commandMapB(cfg *config, param string) error {
 	// check cache before calling pokeapi
 	locationsResp := pokeapi.RespShallowLocations{}
 	var err error

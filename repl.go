@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/barturba/pokedexcli/internal/pokeapi"
 	"github.com/barturba/pokedexcli/internal/pokecache"
@@ -20,7 +21,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, string) error
 }
 
 func startRepl(cfg *config) {
@@ -34,10 +35,19 @@ func startRepl(cfg *config) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		_, ok := cmds[scanner.Text()]
+		input := strings.Fields(scanner.Text())
+		firstWord := ""
+		secondWord := ""
+		if len(input) > 0 {
+			firstWord = input[0]
+		}
+		if len(input) > 1 {
+			secondWord = input[1]
+		}
+		_, ok := cmds[firstWord]
 		fmt.Println("")
 		if ok {
-			err := cmds[scanner.Text()].callback(cfg)
+			err := cmds[firstWord].callback(cfg, secondWord)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -52,6 +62,11 @@ func getCommands() map[string]cliCommand {
 			name:        "help",
 			description: "Displays a help message",
 			callback:    commandHelp,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Displays the informaion about a location area in the Pokemon world.",
+			callback:    commandExplore,
 		},
 		"map": {
 			name:        "map",
