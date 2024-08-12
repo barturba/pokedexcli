@@ -18,11 +18,12 @@ type Config struct {
 }
 
 const (
-	baseURL = "https://pokeapi.co/api/v2/location/?limit=20"
+	baseURL      = "https://pokeapi.co/api/v2/location/?offset=0&limit=20"
+	cacheTimeout = 30 * time.Minute
 )
 
 func main() {
-	pokeCache := pokecache.NewCache(15 * time.Second)
+	pokeCache := pokecache.NewCache(cacheTimeout)
 	pokeClient := pokeapi.NewClient(5*time.Second, pokeCache)
 	pokeCache.Add("abc.com", []byte("content"))
 	cfg := &config{
