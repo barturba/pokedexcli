@@ -8,8 +8,20 @@ import (
 )
 
 func commandExplore(cfg *config, areaName string) error {
-
 	fmt.Printf("Exploring %s...\n", areaName)
+	locationResp, err := getResponse(cfg, areaName)
+
+	if err != nil {
+		return err
+	}
+
+	printPokemon(locationResp)
+
+	return nil
+
+}
+
+func getResponse(cfg *config, areaName string) (pokeapi.RespShallowLocation, error) {
 
 	locationResp := pokeapi.RespShallowLocation{}
 	var err error
@@ -18,24 +30,26 @@ func commandExplore(cfg *config, areaName string) error {
 	if found {
 		err = json.Unmarshal(val, &locationResp)
 		if err != nil {
-			return err
+			return pokeapi.RespShallowLocation{}, err
 		}
 	} else {
 		locationResp, err = cfg.pokeapiClient.ListLocation(&areaName)
 		if err != nil {
-			return err
+			return pokeapi.RespShallowLocation{}, err
 		}
 		dat, err := json.Marshal(&locationResp)
 		if err != nil {
-			return err
+			return pokeapi.RespShallowLocation{}, err
 		}
 		cfg.pokeCache.Add(areaName, dat)
 	}
+	return locationResp, nil
 
+}
+
+func printPokemon(locationResp pokeapi.RespShallowLocation) {
 	fmt.Println("Found Pokemon:")
 	for _, pokemon := range locationResp.PokemonEncounters {
 		fmt.Printf(" - %s\n", pokemon.Pokemon.Name)
 	}
-	return nil
-
 }
