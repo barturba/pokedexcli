@@ -9,7 +9,7 @@ import (
 
 func commandExplore(cfg *config, areaName string) error {
 	fmt.Printf("Exploring %s...\n", areaName)
-	locationResp, err := getResponse(cfg, areaName)
+	locationResp, err := getLocationResp(cfg, areaName)
 
 	if err != nil {
 		return err
@@ -21,7 +21,7 @@ func commandExplore(cfg *config, areaName string) error {
 
 }
 
-func getResponse(cfg *config, areaName string) (pokeapi.RespShallowLocation, error) {
+func getLocationResp(cfg *config, areaName string) (pokeapi.RespShallowLocation, error) {
 
 	locationResp := pokeapi.RespShallowLocation{}
 	var err error
