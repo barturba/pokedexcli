@@ -8,7 +8,6 @@ import (
 )
 
 func commandMap(cfg *config, param string) error {
-	// check cache before calling pokeapi
 	locationsResp := pokeapi.RespShallowLocations{}
 	var err error
 
@@ -46,12 +45,8 @@ func commandMap(cfg *config, param string) error {
 }
 
 func commandMapB(cfg *config, param string) error {
-	// check cache before calling pokeapi
 	locationsResp := pokeapi.RespShallowLocations{}
 	var err error
-	// map -> 0 -> 20
-	// map -> 20 -> 40
-	// mapb -> 40 -> 20
 
 	val, ok := cfg.pokeCache.Get(*cfg.prevLocationsURL)
 	if ok {

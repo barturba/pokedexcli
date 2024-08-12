@@ -20,14 +20,12 @@ func commandExplore(cfg *config, areaName string) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("got explore data from cache")
 	} else {
 
 		locationResp, err = cfg.pokeapiClient.ListLocation(&areaName)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("got explore data from api")
 		dat, err := json.Marshal(&locationResp)
 		if err != nil {
 			return err
