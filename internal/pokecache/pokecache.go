@@ -52,7 +52,7 @@ func (c *Cache) remove(key string) {
 }
 
 func (c *Cache) reapLoop() {
-	ticker := time.NewTicker(time.Second * 5)
+	ticker := time.NewTicker(time.Millisecond * 1)
 	defer ticker.Stop()
 	done := make(chan bool)
 	for {
