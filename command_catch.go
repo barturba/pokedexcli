@@ -8,6 +8,7 @@ func commandCatch(cfg *config, name string) error {
 	if err != nil {
 		return err
 	}
+	cfg.pokedex[name] = pokemonResp
 	// change the chance of catching the pokemon from 100%
 	// derive and use the chance of catching the pokemon
 	fmt.Printf("caught: %s\n", pokemonResp.Name)

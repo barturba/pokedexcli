@@ -16,6 +16,7 @@ type config struct {
 	pokeCache        *pokecache.Cache
 	nextLocationsURL *string
 	prevLocationsURL *string
+	pokedex          map[string]pokeapi.RespPokemon
 }
 
 type cliCommand struct {
