@@ -25,10 +25,12 @@ const (
 func main() {
 	pokeCache := pokecache.NewCache(cacheTimeout)
 	pokeClient := pokeapi.NewClient(5*time.Second, pokeCache)
+	pokedex := make(map[string]pokeapi.RespPokemon)
 	pokeCache.Add("abc.com", []byte("content"))
 	cfg := &config{
 		pokeapiClient: pokeClient,
 		pokeCache:     pokeCache,
+		pokedex:       pokedex,
 	}
 	url := baseURL
 	cfg.nextLocationsURL = &url
