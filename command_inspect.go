@@ -29,13 +29,4 @@ func printPokemonStats(pokemon pokeapi.RespPokemon) {
 	for _, t := range pokemon.Types {
 		fmt.Printf(" - %s\n", t.Type.Name)
 	}
-	// fmt.Printf("  -hp: %v\n", pokemon.Stats[0].BaseStat)
-	// fmt.Printf("  -attack: %s\n", pokemon.Name)
-	// fmt.Printf("  -defense: %s\n", pokemon.Name)
-	// fmt.Printf("  -special-attack: %s\n", pokemon.Name)
-	// fmt.Printf("  -special-defense: %s\n", pokemon.Name)
-	// fmt.Printf("  -speed: %s\n", pokemon.Name)
-	// fmt.Printf("Types: %s\n", pokemon.Name)
-	// fmt.Printf("  - normal: %s\n", pokemon.Name)
-	// fmt.Printf("  - flying: %s\n", pokemon.Name)
 }
