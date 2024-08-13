@@ -57,6 +57,10 @@ func (c *Client) ListLocation(areaIDorName *string) (RespShallowLocation, error)
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != 200 {
+		return RespShallowLocation{}, errors.New("location not found")
+	}
+
 	dat, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return RespShallowLocation{}, err
