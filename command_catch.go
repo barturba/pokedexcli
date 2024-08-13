@@ -4,11 +4,12 @@ import "fmt"
 
 func commandCatch(cfg *config, name string) error {
 	fmt.Printf("catching Pokemon: %s\n", name)
-	// https://pokeapi.co/api/v2/pokemon/{id or name}
 	pokemonResp, err := cfg.pokeapiClient.ListPokemon(&name)
 	if err != nil {
 		return err
 	}
+	// change the chance of catching the pokemon from 100%
+	// derive and use the chance of catching the pokemon
 	fmt.Printf("caught: %s\n", pokemonResp.Name)
 	return nil
 }
